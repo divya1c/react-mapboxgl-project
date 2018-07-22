@@ -1,23 +1,50 @@
 import React, { Component } from 'react';
 import './App.css';
-import PlatformMap from './oneconcern_mapping/PlatformMap';
+import SymbolLayerConfig from './oneconcern_mapping/SymbolLayerConfig';
+import BaseMap from './BaseMap';
+import SymbolMapLayer from './SymbolMapLayer';
 
 class Map extends Component {
-  constructor(props: Props) {
+  constructor(props) {
     super(props);
 
     this.state = {
-      map: props.map
+      map: undefined
     };
+    this.setMap=this.setMap.bind(this);
   }
 
-  componentDidMount() {
-    let map = new PlatformMap(this.mapContainer, 11, 6, 18, [-110.982309, 32.229371]);
+  setMap(map) {
+    const changedMap = map;
+    this.setState({map: changedMap}, () => {
+      console.log(this.state.map);
+    });
   }
   
   render() {
+    const map = this.state.map;
+    const sLayerConfig = new SymbolLayerConfig()
+                          .setIconImage('{category}-15')
+                          .setTextField('{name}')
+                          .setTextSize(10)
+                          .setTextColor('red')
+                          .setTextTransform('uppercase')
+                          .setTextHaloColor('#FFFFFF')
+                          .setTextHaloWidth(2)
+                          .setTextTranslate([0, 12])
+                          .setTextAnchor('top');
+    const srcCoordinatesArray = [[-110.855590, 32.154922]];
+    const srcProperties = [{"name": "Davis Monthan Air Force Base", "category": "airfield"}];
     return (
-      <div ref={el => this.mapContainer = el} className="map"/>
+      <div>
+        <BaseMap setMap={this.setMap}/>
+        <SymbolMapLayer map={map} 
+                        setMap={this.setMap} 
+                        config={sLayerConfig}
+                        srcCoordinatesArray={srcCoordinatesArray}
+                        srcProperties={srcProperties}
+                        srcType='geojson'/>
+      </div>
     );
   }
 }
