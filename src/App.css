@@ -1,0 +1,15 @@
+.map {
+  height: 100%;
+  top:0; 
+  bottom:0; 
+  width:100%;
+  position: absolute;
+}
+
+.leftbar {
+  height: 100vh;
+  width: 300px;
+  background: white;
+  z-index: 1;
+  position: absolute;
+}
